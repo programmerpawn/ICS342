@@ -15,14 +15,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ics342.ui.theme.ICS342Theme
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -32,26 +30,26 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 private val ForecastItems = listOf(
-    DayForecast(1, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(2, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(3, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(4, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(5, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(6, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(7, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(8, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(9, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(10, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(11, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(12, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(13, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(14, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(15, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
-    DayForecast(16, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(1, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(2, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(3, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(4, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(5, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(6, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(7, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(8, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(9, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(10, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(11, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(12, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(13, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(14, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(15, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
+    DayForecastOld(16, 8, 9, ForecastTemp(1.0F, 1.0F, 1.0F), 1.0F, 1),
 )
 
 @Composable
-fun DataItemView(ForecastItems: DayForecast) {
+fun DataItemView(ForecastItems: DayForecastOld) {
     Spacer(modifier = Modifier.size(40.dp))
     Row {
         val imageMod = Modifier
@@ -112,7 +110,7 @@ fun DataItemView(ForecastItems: DayForecast) {
 }
 
 @Composable
-fun TempDetailScreen(ForecastItems: List<DayForecast>) {
+fun TempDetailScreen(ForecastItems: List<DayForecastOld>) {
 
     Column(
         Modifier.fillMaxSize(),

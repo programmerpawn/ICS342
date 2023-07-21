@@ -31,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.ics342.ui.theme.ICS342Theme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
@@ -58,22 +59,21 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 
-fun WeatherView() {
+fun WeatherView(viewModel: ForecastViewModel = hiltViewModel()) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(id = R.string.app_name),
+            text = stringResource(id = R.string.app_name), //title of the app
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.Gray)
                 .padding(10.dp)
 
         )
-        //Sets the location where the temperature is located
         Text(
-            text = stringResource(id = R.string.myLocation),
+            text = stringResource(id = R.string.myLocation),//Sets the location where the temperature is located
             fontSize = 15.sp,
             modifier = Modifier.padding(10.dp)
         )
@@ -81,14 +81,12 @@ fun WeatherView() {
 
         Row {
             Column(modifier = Modifier.padding(5.dp)) {
-                //Sets the current Temp
                 Text(
-                    text = stringResource(id = R.string.currentTempData),
+                    text = stringResource(id = R.string.currentTempData), //Sets the current Temp
                     fontSize = 45.sp
                 )
-                //Sets the "feels like" temp
                 Text(
-                    text = stringResource(id = R.string.feelsLike),
+                    text = stringResource(id = R.string.feelsLike), //Sets the "feels like" temp
                     fontSize = 15.sp
                 )
                 Spacer(modifier = Modifier.height(25.dp))
@@ -109,8 +107,7 @@ fun WeatherView() {
 
             }
 
-            Column(modifier = Modifier.padding(5.dp)) {
-                //Sets the picture
+            Column(modifier = Modifier.padding(5.dp)) { //Sets the picture
                 val imageMod = Modifier
                     .size(75.dp)
                 Image(

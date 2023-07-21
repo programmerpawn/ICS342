@@ -1,6 +1,6 @@
 package com.example.ics342
 
-data class DayForecast(
+data class DayForecastOld(
     val date: Long,
     val sunrise: Long,
     val sunset: Long,

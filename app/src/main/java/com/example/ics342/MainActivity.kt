@@ -1,8 +1,10 @@
 package com.example.ics342
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -44,17 +46,27 @@ import androidx.navigation.compose.rememberNavController
 
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val navController = rememberNavController()
             ICS342Theme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {}
+                ) {
+                    NavHost(navController = navController, startDestination = "CurrentConditions") {
+                        composable(route = "CurrentConditions") {
+
+                        }
+                        composable("Forecast") {
+                            NavigationView()
+                        }
+                    }
+                }
             }
-            NavigationView()
         }
     }
 }
@@ -131,6 +143,7 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
 }
 
 //Navigation function: home screen and detail screen
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationView() {
 
@@ -162,10 +175,12 @@ fun HomeScreen(navController: NavHostController) {
 
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     ICS342Theme {
+        val navController = rememberNavController()
         WeatherView()
         NavigationView()
     }

@@ -12,16 +12,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,16 +31,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.ics342.ui.theme.ICS342Theme
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
-import androidx.navigation.NavGraph
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.ics342.ui.theme.ICS342Theme
 
 
 class MainActivity : ComponentActivity() {
@@ -50,28 +46,19 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
             ICS342Theme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
-                ) {
-                    NavHost(navController = navController, startDestination = "CurrentConditions") {
-                        composable(route = "CurrentConditions") {
-
-                        }
-                        composable("Forecast") {
-                            NavigationView()
-                        }
-                    }
-                }
+                ) {}
             }
+            NavigationView()
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
 
@@ -91,15 +78,12 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
                 .fillMaxWidth()
                 .background(Color.Gray)
                 .padding(10.dp)
-
         )
         Text(
             text = stringResource(id = R.string.myLocation),//Sets the location where the temperature is located
             fontSize = 15.sp,
             modifier = Modifier.padding(10.dp)
         )
-
-
         Row {
             Column(modifier = Modifier.padding(5.dp)) {
                 Text(
@@ -142,21 +126,6 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
     }
 }
 
-//Navigation function: home screen and detail screen
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun NavigationView() {
-
-    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = "home") {
-        composable("home") {
-            HomeScreen(navController)
-        }
-        composable(Screens.ForecastScreen.route) {
-            ForecastScreen(navController)
-        }
-    }
-}
 
 @Composable
 fun HomeScreen(navController: NavHostController) {
@@ -166,22 +135,37 @@ fun HomeScreen(navController: NavHostController) {
         verticalArrangement = Arrangement.Center
     ) {
         Button(
-            onClick = {navController.navigate(Screens.ForecastScreen.route)},
+            onClick = { navController.navigate(Screens.ForecastScreen.route) },
             colors = ButtonDefaults.buttonColors(Color.Gray.copy(alpha = 1F)),
-        ) { Text(text = "Forecast")}
+        ) { Text(text = "Forecast") }
     }
-    WeatherView()
+        //WeatherView()
 }
 
 
+//Navigation function: home screen and detail screen
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun NavigationView() {
+
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") {
+            HomeScreen(navController)
+
+        }
+        composable(Screens.ForecastScreen.route) {
+            ForecastScreen(navController)
+        }
+    }
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     ICS342Theme {
-        val navController = rememberNavController()
-        WeatherView()
+
         NavigationView()
     }
 }

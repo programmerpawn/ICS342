@@ -122,6 +122,7 @@ fun DataItemView(forecast: DayForecastNew) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {
+
     val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d")
     val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mma")
     val forecastData = viewModel.forecastData.observeAsState()

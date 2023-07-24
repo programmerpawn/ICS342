@@ -11,8 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForecastViewModel @Inject constructor(private val apiService: ApiService) : ViewModel() {
-    private val _forecastLiveData: MutableLiveData<List<DayForecastOld>> = MutableLiveData()
-    val forecastData: LiveData<List<DayForecastOld>>
+    private val _forecastLiveData: MutableLiveData<List<DayForecastNew>> = MutableLiveData()
+    val forecastData: LiveData<List<DayForecastNew>>
         get() = _forecastLiveData
 
     fun fetchWeatherForecast() {

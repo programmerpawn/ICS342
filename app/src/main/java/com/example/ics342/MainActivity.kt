@@ -19,8 +19,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,15 +54,21 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {}
             }
-
             NavigationView()
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
 
-fun WeatherView(viewModel: ForecastViewModel = hiltViewModel()) {
+    val currentConditions = viewModel.weatherData.observeAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.viewAppeared()
+    }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -82,27 +91,27 @@ fun WeatherView(viewModel: ForecastViewModel = hiltViewModel()) {
         Row {
             Column(modifier = Modifier.padding(5.dp)) {
                 Text(
-                    text = stringResource(id = R.string.currentTempData), //Sets the current Temp
+                    text = "${currentConditions.value?.currentTemp}", //Sets the current Temp
                     fontSize = 45.sp
                 )
                 Text(
-                    text = stringResource(id = R.string.feelsLike), //Sets the "feels like" temp
+                    text = "${currentConditions.value?.feelsLike}", //Sets the "feels like" temp
                     fontSize = 15.sp
                 )
                 Spacer(modifier = Modifier.height(25.dp))
 
                 //other information about the weather
                 Text(
-                    text = stringResource(id = R.string.dailyLow)
+                    text = "${currentConditions.value?.minTemp}" //daily low
                 )
                 Text(
-                    text = stringResource(id = R.string.dailyHigh)
+                    text = "${currentConditions.value?.maxTemp}" //daily high
                 )
                 Text(
-                    text = stringResource(id = R.string.humidity)
+                    text = "${currentConditions.value?.humidity}" //humidity
                 )
                 Text(
-                    text = stringResource(id = R.string.stringPressure)
+                    text = "${currentConditions.value?.pressure}" //pressure
                 )
 
             }

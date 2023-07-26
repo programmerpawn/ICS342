@@ -13,25 +13,16 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class CurrentConditionsViewModel @Inject constructor(private val apiService: ApiService) : ViewModel() {
+class CurrentConditionsViewModel @Inject constructor(private val apiService: ApiService) :
+    ViewModel() {
 
-    private val _weatherData: MutableLiveData<WeatherData> = MutableLiveData()
-    val weatherData: LiveData<WeatherData>
+    private val _weatherData: MutableLiveData<CurrentWeather> = MutableLiveData()
+    val weatherData: LiveData<CurrentWeather>
         get() = _weatherData
 
     fun viewAppeared() {
         viewModelScope.launch {
-            try {
-                val response = apiService.getWeatherData()
-                if (response.isSuccessful) {
-                    val weatherData = response.body()
-                    _weatherData.value = weatherData
-                } else {
-                    Log.e("CurrentConditionsViewModel", "API call failed: ${response.errorBody()}")
-                }
-            } catch (e: Exception) {
-                Log.e("CurrentConditionsViewModel", "Exception: $e")
-            }
+            _weatherData.value = apiService.getWeatherData()
         }
     }
 }

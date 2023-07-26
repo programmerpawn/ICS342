@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.sp
 import com.example.ics342.ui.theme.ICS342Theme
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -44,7 +46,7 @@ import java.util.TimeZone
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DataItemView(forecast: DayForecastNew) {
+fun DataItemView(forecast: DayForecast) {
     val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d")
     val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mma")
 
@@ -121,16 +123,7 @@ fun DataItemView(forecast: DayForecastNew) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {
-
-    val dateFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("MMM d")
-    val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mma")
-    val forecastData = viewModel.forecastData.observeAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.fetchWeatherForecast()
-    }
-
+fun TempDetailScreen(forecast: DayForecast) {
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -145,56 +138,75 @@ fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {
         )
     }
 
-    forecastData.value?.let { forecasts ->
-        forecasts.forEach { DayForecastNew ->
-                Column{
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(3.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 5.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Column(modifier = Modifier.padding(2.dp)) {
-                            Text(
-                                text = "${DayForecastNew.temp}", // Display the formatted date
-                                fontWeight = FontWeight.Bold,
-                            )
-                        }
-                        Column {
-                            Text(
-                                text = "Temp: ${DayForecastNew.temp}°", // Display the day temperature
-                            )
-                            Spacer(modifier = Modifier.size(6.dp))
-                            Text(
-                                text = "High: ${DayForecastNew.highTemp}°", // Display the maximum temperature
-                            )
-                        }
-                        Text(
-                            text = "Low: ${DayForecastNew.lowTemp}°",  // Display the minimum temperature
-                            modifier = Modifier.padding(2.dp, 28.dp, 1.dp)
-                        )
-                        Column {
-                            Text(
-                                text = "Sunrise: ${DayForecastNew.sunrise}", // Display the sunrise time
-                            )
-                            Spacer(modifier = Modifier.size(6.dp))
-                            Text(
-                                text = "Sunset: ${DayForecastNew.sunset}", // Display the sunset time
-                            )
-                        }
-                    }
+    Column {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+                .padding(3.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.padding(2.dp)) {
+                    Text(
+                        text = "${forecast.dayTime}", // Display the formatted date
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+                Column {
+                    Text(
+                        text = "Temp: ${forecast.dayTemp}°", // Display the day temperature
+                    )
+                    Spacer(modifier = Modifier.size(6.dp))
+                    Text(
+                        text = "High: ${forecast.highTemp}°", // Display the maximum temperature
+                    )
+                }
+                Text(
+                    text = "Low: ${forecast.lowTemp}°",  // Display the minimum temperature
+                    modifier = Modifier.padding(2.dp, 28.dp, 1.dp)
+                )
+                Column {
+                    Text(
+                        text = "Sunrise: ${forecast.sunrise}", // Display the sunrise time
+                    )
+                    Spacer(modifier = Modifier.size(6.dp))
+                    Text(
+                        text = "Sunset: ${forecast.sunset}", // Display the sunset time
+                    )
                 }
             }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ForecastList(viewModel: ForecastViewModel = hiltViewModel()) { //merge this with tempdetailscreen or call this with tempdetailscreen
+
+
+    val forecastData = viewModel.forecastData.observeAsState()
+    //val forecastList = forecastData.value?.ForecastList save this for reference
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchWeatherForecast()
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        items(items = forecastData.value?.ForecastList ?: listOf()) {
+            DataItemView(forecast = it)
+        }
+    }
+}
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -218,9 +230,9 @@ fun ForecastScreen(navController: NavController) {
                 modifier = Modifier.padding(5.dp),
             )
         }
+        ForecastList()
+        //TempDetailScreen() //need to call this
     }
-    TempDetailScreen()
-
 }
 
 
@@ -229,8 +241,9 @@ fun ForecastScreen(navController: NavController) {
 @Composable
 fun ForecastItems() {
     ICS342Theme {
-        TempDetailScreen()
+        ForecastList()
         val navController = rememberNavController()
         ForecastScreen(navController)
     }
 }
+

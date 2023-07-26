@@ -39,8 +39,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ics342.ui.theme.ICS342Theme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +63,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
 
-    val currentConditions = viewModel.weatherData.observeAsState()
+    val currentConditions = viewModel.weatherData.observeAsState() //fix this
 
     LaunchedEffect(Unit) {
         viewModel.viewAppeared()
@@ -87,7 +88,7 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
         Row {
             Column(modifier = Modifier.padding(5.dp)) {
                 Text(
-                    text = "${currentConditions.value?.currentTemp}", //Sets the current Temp
+                    text = "${currentConditions.value?.temp}", //Sets the current Temp
                     fontSize = 45.sp
                 )
                 Text(
@@ -98,10 +99,10 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
 
                 //other information about the weather
                 Text(
-                    text = "${currentConditions.value?.minTemp}" //daily low
+                    text = "${currentConditions.value?.tempMin}" //daily low
                 )
                 Text(
-                    text = "${currentConditions.value?.maxTemp}" //daily high
+                    text = "${currentConditions.value?.tempMax}" //daily high
                 )
                 Text(
                     text = "${currentConditions.value?.humidity}" //humidity
@@ -139,11 +140,12 @@ fun HomeScreen(navController: NavHostController) {
             colors = ButtonDefaults.buttonColors(Color.Gray.copy(alpha = 1F)),
         ) { Text(text = "Forecast") }
     }
-        //WeatherView()
+        WeatherView()
 }
 
 
 //Navigation function: home screen and detail screen
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationView() {
@@ -165,7 +167,6 @@ fun NavigationView() {
 @Composable
 fun GreetingPreview() {
     ICS342Theme {
-
         NavigationView()
     }
 }

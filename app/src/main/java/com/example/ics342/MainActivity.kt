@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
 
-    val currentConditions = viewModel.weatherData.observeAsState() //fix this
+    val currentConditions = viewModel.weatherData.observeAsState()
 
     LaunchedEffect(Unit) {
         viewModel.viewAppeared()
@@ -88,27 +88,27 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
         Row {
             Column(modifier = Modifier.padding(5.dp)) {
                 Text(
-                    text = "${currentConditions.value?.temp}", //Sets the current Temp
+                    text = "${currentConditions.value?.main?.temp}", //Sets the current Temp
                     fontSize = 45.sp
                 )
                 Text(
-                    text = "${currentConditions.value?.feelsLike}", //Sets the "feels like" temp
+                    text = "${currentConditions.value?.main?.feelsLike}", //Sets the "feels like" temp
                     fontSize = 15.sp
                 )
                 Spacer(modifier = Modifier.height(25.dp))
 
                 //other information about the weather
                 Text(
-                    text = "${currentConditions.value?.tempMin}" //daily low
+                    text = "${currentConditions.value?.main?.tempMin}" //daily low
                 )
                 Text(
-                    text = "${currentConditions.value?.tempMax}" //daily high
+                    text = "${currentConditions.value?.main?.tempMax}" //daily high
                 )
                 Text(
-                    text = "${currentConditions.value?.humidity}" //humidity
+                    text = "${currentConditions.value?.main?.humidity}" //humidity
                 )
                 Text(
-                    text = "${currentConditions.value?.pressure}" //pressure
+                    text = "${currentConditions.value?.main?.pressure}" //pressure
                 )
 
             }
@@ -145,7 +145,6 @@ fun HomeScreen(navController: NavHostController) {
 
 
 //Navigation function: home screen and detail screen
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationView() {

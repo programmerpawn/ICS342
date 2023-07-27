@@ -16,10 +16,8 @@ class ForecastViewModel @Inject constructor(private val apiService: ApiService) 
         get() = _forecastLiveData
 
     fun fetchWeatherForecast() {
-        viewModelScope.launch {
-            fun viewAppeared() = viewModelScope.launch {
-                _forecastLiveData.value = apiService.getForecast()
+            viewModelScope.launch {
+                _forecastLiveData.value = apiService.getForecastData()
             }
-        }
     }
 }

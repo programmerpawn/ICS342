@@ -11,15 +11,14 @@ import retrofit2.http.Path
 
 interface ApiService {
     @GET("weather")
-
     suspend fun getWeatherData(
         @Query("zip") zipCode: String = ZIPCODE,
         @Query("units") units: String = "imperial",
         @Query("app's") appId: String = "75b1178718a834230f0b0fc0d991228c"
-    ): CurrentWeather
+    ): CurrentWeatherData
 
     @GET("forecast/daily")
-    suspend fun getForecast(
+    suspend fun getForecastData(
         @Query("zip") zipCode: String = ZIPCODE,
         @Query("cnt") count: Int = FORECAST_COUNT,
         @Query("units") units: String = "imperial",

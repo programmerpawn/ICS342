@@ -73,17 +73,17 @@ fun DataItemView(forecast: DayForecast) {
 
         Column {
             Text(
-                text = stringResource(id = R.string.temp_name) + "${forecast.dayTemp}", //gets the current temperature
+                text = stringResource(id = R.string.temp_name) + "${forecast.temp}", //gets the current temperature
                 fontSize = 12.sp
             )
             Row {
                 Text(
-                    text = "${forecast.highTemp}", //gets the high temperature
+                    text = "${forecast.temp.max}", //gets the high temperature
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = 12.sp
                 )
                 Text(
-                    text = "${forecast.lowTemp}", //gets the low temperature
+                    text = "${forecast.temp.min}", //gets the low temperature
                     style = MaterialTheme.typography.bodySmall,
                     fontSize = 12.sp
                 )
@@ -123,7 +123,16 @@ fun DataItemView(forecast: DayForecast) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun TempDetailScreen(forecast: DayForecast) {
+fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {
+    //TempDetailScreen(forecast: DayForecast)
+
+    val forecastData = viewModel.forecastData.observeAsState()
+    //val forecastList = forecastData.value?.ForecastList //save this for reference
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchWeatherForecast()
+    }
+
     Column(
         Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -138,6 +147,85 @@ fun TempDetailScreen(forecast: DayForecast) {
         )
     }
 
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        items(items = forecastData.value?.ForecastList ?: listOf()) {
+            DataItemView(forecast = it)
+        }
+    }
+}
+
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ForecastScreen(navController: NavController) {
+    Column(
+        Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.End,
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        Button(
+            shape = MaterialTheme.shapes.medium,
+            modifier = Modifier
+                .padding(5.dp),
+            onClick = {
+                //Navigates to Home Screen
+                navController.navigate("home")
+            }
+        ) {
+            Text(
+                text = "Back",
+                modifier = Modifier.padding(5.dp),
+            )
+        }
+        TempDetailScreen() //ideas on how to call this. call it or merge it with forecastlist
+    }
+}
+
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showBackground = true)
+@Composable
+fun ForecastItems() {
+    ICS342Theme {
+        TempDetailScreen()
+        val navController = rememberNavController()
+        ForecastScreen(navController)
+    }
+}
+
+/*@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ForecastList(viewModel: ForecastViewModel = hiltViewModel()) { //merge this with tempdetailscreen or call this with tempdetailscreen or call tempdetailscree here
+
+
+    val forecastData = viewModel.forecastData.observeAsState()
+    //val forecastList = forecastData.value?.ForecastList save this for reference
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchWeatherForecast()
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        items(items = forecastData.value?.ForecastList ?: listOf()) {
+            DataItemView(forecast = it)
+        }
+    }
+}
+*/
+
+/*
+fun OldForecastView(){
     Column {
         Column(
             modifier = Modifier
@@ -153,7 +241,7 @@ fun TempDetailScreen(forecast: DayForecast) {
             ) {
                 Column(modifier = Modifier.padding(2.dp)) {
                     Text(
-                        text = "${forecast.dayTime}", // Display the formatted date
+                        text = "${forecastData.}", // Display the formatted date
                         fontWeight = FontWeight.Bold,
                     )
                 }
@@ -183,67 +271,4 @@ fun TempDetailScreen(forecast: DayForecast) {
         }
     }
 }
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun ForecastList(viewModel: ForecastViewModel = hiltViewModel()) { //merge this with tempdetailscreen or call this with tempdetailscreen
-
-
-    val forecastData = viewModel.forecastData.observeAsState()
-    //val forecastList = forecastData.value?.ForecastList save this for reference
-
-    LaunchedEffect(Unit) {
-        viewModel.fetchWeatherForecast()
-    }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        items(items = forecastData.value?.ForecastList ?: listOf()) {
-            DataItemView(forecast = it)
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun ForecastScreen(navController: NavController) {
-    Column(
-        Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.End,
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        Button(
-            shape = MaterialTheme.shapes.medium,
-            modifier = Modifier
-                .padding(5.dp),
-            onClick = {
-                //Navigates to Home Screen
-                navController.navigate("home")
-            }
-        ) {
-            Text(
-                text = "Back",
-                modifier = Modifier.padding(5.dp),
-            )
-        }
-        ForecastList()
-        //TempDetailScreen() //need to call this
-    }
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun ForecastItems() {
-    ICS342Theme {
-        ForecastList()
-        val navController = rememberNavController()
-        ForecastScreen(navController)
-    }
-}
-
+*/

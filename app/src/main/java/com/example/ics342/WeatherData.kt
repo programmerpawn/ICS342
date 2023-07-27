@@ -16,18 +16,6 @@ data class DayForecast(
     @Json(name = "humidity") val humidity: Int,
     @Json(name = "weather") val weather: List<ForeCastConditions>,
 ) {
-    @Json(name = "day")
-    val dayTemp: Float
-        get() = temp.day
-
-    @Json(name = "min")
-    val lowTemp: Float
-        get() = temp.min
-
-    @Json(name = "max")
-    val highTemp: Float
-        get() = temp.max
-
     val iconUrl: String
         get() = "https://openweathermap.org/img/wn/${weather.firstOrNull()?.icon}@2x.png"
 }
@@ -57,13 +45,12 @@ data class CurrentWeather(
     @Json(name = "humidity") val humidity: Int,
 )
 
-data class WeatherData(
+data class CurrentWeatherData(
     @Json(name = "main") val main: CurrentWeather,
     @Json(name = "weather") val weather: List<WeatherConditions>,
 ) {
     val iconUrl: String
         get() = "https://openweathermap.org/img/wn/${weather.firstOrNull()?.icon}@2x.png"
-
 }
 
 data class WeatherConditions(

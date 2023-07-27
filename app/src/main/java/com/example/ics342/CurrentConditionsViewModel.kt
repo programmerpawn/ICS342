@@ -16,8 +16,8 @@ import javax.inject.Inject
 class CurrentConditionsViewModel @Inject constructor(private val apiService: ApiService) :
     ViewModel() {
 
-    private val _weatherData: MutableLiveData<CurrentWeather> = MutableLiveData()
-    val weatherData: LiveData<CurrentWeather>
+    private val _weatherData: MutableLiveData<CurrentWeatherData> = MutableLiveData()
+    val weatherData: LiveData<CurrentWeatherData>
         get() = _weatherData
 
     fun viewAppeared() {

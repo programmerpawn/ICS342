@@ -41,6 +41,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.ics342.ui.theme.ICS342Theme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.math.roundToLong
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -62,7 +63,7 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
+fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) { //ADD IN THE TITLES FOR EACH OF THE TEMPS HERE THEN IT'S DONE
 
     val weatherData = viewModel.weatherData.observeAsState()
 
@@ -89,27 +90,27 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
         Row {
             Column(modifier = Modifier.padding(5.dp)) {
                 Text(
-                    text = "${weatherData.value?.main?.temp}", //Sets the current Temp
+                    text = "${weatherData.value?.main?.temp?.roundToLong()}" + stringResource(id = R.string.temp_logo), //Sets the current Temp
                     fontSize = 45.sp
                 )
                 Text(
-                    text = "${weatherData.value?.main?.feelsLike}", //Sets the "feels like" temp
+                    text = "Feels like ${weatherData.value?.main?.feelsLike?.roundToLong()}º", //Sets the "feels like" temp
                     fontSize = 15.sp
                 )
                 Spacer(modifier = Modifier.height(25.dp))
 
                 //other information about the weather
                 Text(
-                    text = "${weatherData.value?.main?.tempMin}" //daily low
+                    text = "Low ${weatherData.value?.main?.tempMin?.roundToLong()}º" //daily low
                 )
                 Text(
-                    text = "${weatherData.value?.main?.tempMax}" //daily high
+                    text = "High ${weatherData.value?.main?.tempMax?.roundToLong()}º" //daily high
                 )
                 Text(
-                    text = "${weatherData.value?.main?.humidity}" //humidity
+                    text = "Humidity ${weatherData.value?.main?.humidity}%" //humidity
                 )
                 Text(
-                    text = "${weatherData.value?.main?.pressure}" //pressure
+                    text = "Pressure ${weatherData.value?.main?.pressure} hPa" //pressure
                 )
 
             }

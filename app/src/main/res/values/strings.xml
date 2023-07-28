@@ -15,4 +15,5 @@
     <string name="am_name">:00am </string>
     <string name="pm_name">:00pm </string>
     <string name="temp_name">Temp: </string>
+    <string name="temp_logo">º</string>
 </resources>

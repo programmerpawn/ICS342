@@ -37,8 +37,11 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.TimeZone
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 
+//FIX THE DISPLAY HERE, IT WORKS GOING BACK AND FORTH JUST NO DISPLAY OF TEMPS
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DataItemView(forecast: DayForecast) {
@@ -46,9 +49,12 @@ fun DataItemView(forecast: DayForecast) {
     val timeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("h:mma")
 
     Spacer(modifier = Modifier.size(40.dp))
-    Row {
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+    ) {
         val imageMod = Modifier
-            .size(25.dp)
+            .size(45.dp)
         Image(
             painter = painterResource(id = R.drawable.sunny),
             contentDescription = "sun",
@@ -61,43 +67,40 @@ fun DataItemView(forecast: DayForecast) {
                 Instant.ofEpochSecond(forecast.dayTime),
                 TimeZone.getDefault().toZoneId()
             ).format(dateFormat).toString(), //date name
-            style = MaterialTheme.typography.bodySmall
         )
 
-        Spacer(modifier = Modifier.size(15.dp))
+        //Spacer(modifier = Modifier.size(15.dp))
 
         Column {
             Text(
-                text = stringResource(id = R.string.temp_name) + "${forecast.temp}", //gets the current temperature
-                fontSize = 12.sp
+                text = "   " + stringResource(id = R.string.temp_name) + " ${forecast.temp.day.roundToInt()}", //gets the current temperature
             )
             Row {
                 Text(
-                    text = "${forecast.temp.max}", //gets the high temperature
+                    text = "High: ${forecast.temp.max.roundToInt()}", //gets the high temperature
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = 12.sp
+
                 )
                 Text(
-                    text = "${forecast.temp.min}", //gets the low temperature
+                    text = "Low: ${forecast.temp.min.roundToInt()}", //gets the low temperature
                     style = MaterialTheme.typography.bodySmall,
-                    fontSize = 12.sp
+
                 )
             }
         }
 
-        Spacer(modifier = Modifier.size(10.dp))
-
-        Column {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
             Text(
                 text = stringResource(id = R.string.sunrise_name) + LocalDateTime.ofInstant(
                     Instant.ofEpochSecond(
                         forecast.sunrise
                     ), TimeZone.getDefault().toZoneId()
-                ).format(timeFormat).toString() + stringResource(
-                    id = R.string.am_name
-                ),
+                ).format(timeFormat).toString(),
                 style = MaterialTheme.typography.bodySmall,
-                fontSize = 12.sp
+
             )
 
             Text(
@@ -105,13 +108,10 @@ fun DataItemView(forecast: DayForecast) {
                     Instant.ofEpochSecond(
                         forecast.sunset
                     ), TimeZone.getDefault().toZoneId()
-                ).format(timeFormat).toString() + stringResource(
-                    id = R.string.pm_name
-                ),
+                ).format(timeFormat).toString(),
                 style = MaterialTheme.typography.bodySmall,
-                fontSize = 12.sp
+
             )
-            Spacer(modifier = Modifier.size(4.dp))
         }
     }
 }
@@ -144,9 +144,7 @@ fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {
 
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
-        verticalArrangement = Arrangement.SpaceBetween
+            .padding(8.dp)
     ) {
         items(items = forecastData.value?.forecastList ?: listOf()) {
             DataItemView(forecast = it)
@@ -176,8 +174,8 @@ fun ForecastScreen(navController: NavController) {
                 modifier = Modifier.padding(5.dp),
             )
         }
-        TempDetailScreen() //ideas on how to call this. call it or merge it with forecastlist
     }
+    TempDetailScreen()
 }
 
 

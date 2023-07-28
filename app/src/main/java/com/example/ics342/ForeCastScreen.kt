@@ -41,7 +41,6 @@ import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 
-//FIX THE DISPLAY HERE, IT WORKS GOING BACK AND FORTH JUST NO DISPLAY OF TEMPS
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DataItemView(forecast: DayForecast) {
@@ -69,23 +68,24 @@ fun DataItemView(forecast: DayForecast) {
             ).format(dateFormat).toString(), //date name
         )
 
-        //Spacer(modifier = Modifier.size(15.dp))
-
-        Column {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
             Text(
                 text = "   " + stringResource(id = R.string.temp_name) + " ${forecast.temp.day.roundToInt()}", //gets the current temperature
             )
             Row {
                 Text(
-                    text = "High: ${forecast.temp.max.roundToInt()}", //gets the high temperature
-                    style = MaterialTheme.typography.bodySmall,
+                    text = "    High: ${forecast.temp.max.roundToInt()}", //gets the high temperature
+                    //style = MaterialTheme.typography.bodySmall,
 
-                )
+                    )
                 Text(
-                    text = "Low: ${forecast.temp.min.roundToInt()}", //gets the low temperature
-                    style = MaterialTheme.typography.bodySmall,
+                    text = "  Low: ${forecast.temp.min.roundToInt()}", //gets the low temperature
+                    //style = MaterialTheme.typography.bodySmall,
 
-                )
+                    )
             }
         }
 
@@ -101,7 +101,7 @@ fun DataItemView(forecast: DayForecast) {
                 ).format(timeFormat).toString(),
                 style = MaterialTheme.typography.bodySmall,
 
-            )
+                )
 
             Text(
                 text = stringResource(id = R.string.sunset_name) + LocalDateTime.ofInstant(
@@ -111,7 +111,7 @@ fun DataItemView(forecast: DayForecast) {
                 ).format(timeFormat).toString(),
                 style = MaterialTheme.typography.bodySmall,
 
-            )
+                )
         }
     }
 }
@@ -189,77 +189,3 @@ fun ForecastItems() {
         ForecastScreen(navController)
     }
 }
-
-/*@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun ForecastList(viewModel: ForecastViewModel = hiltViewModel()) { //merge this with tempdetailscreen or call this with tempdetailscreen or call tempdetailscree here
-
-
-    val forecastData = viewModel.forecastData.observeAsState()
-    //val forecastList = forecastData.value?.ForecastList save this for reference
-
-    LaunchedEffect(Unit) {
-        viewModel.fetchWeatherForecast()
-    }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(8.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        items(items = forecastData.value?.ForecastList ?: listOf()) {
-            DataItemView(forecast = it)
-        }
-    }
-}
-*/
-
-/*
-fun OldForecastView(){
-    Column {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .padding(3.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 5.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(modifier = Modifier.padding(2.dp)) {
-                    Text(
-                        text = "${forecastData.}", // Display the formatted date
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
-                Column {
-                    Text(
-                        text = "Temp: ${forecast.dayTemp}°", // Display the day temperature
-                    )
-                    Spacer(modifier = Modifier.size(6.dp))
-                    Text(
-                        text = "High: ${forecast.highTemp}°", // Display the maximum temperature
-                    )
-                }
-                Text(
-                    text = "Low: ${forecast.lowTemp}°",  // Display the minimum temperature
-                    modifier = Modifier.padding(2.dp, 28.dp, 1.dp)
-                )
-                Column {
-                    Text(
-                        text = "Sunrise: ${forecast.sunrise}", // Display the sunrise time
-                    )
-                    Spacer(modifier = Modifier.size(6.dp))
-                    Text(
-                        text = "Sunset: ${forecast.sunset}", // Display the sunset time
-                    )
-                }
-            }
-        }
-    }
-}
-*/

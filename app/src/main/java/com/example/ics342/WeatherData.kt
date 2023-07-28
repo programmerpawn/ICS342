@@ -3,9 +3,6 @@ package com.example.ics342
 
 import com.squareup.moshi.Json
 
-const val ZIPCODE = "55076"
-const val FORECAST_COUNT = 16
-
 data class DayForecast(
 // creates the day weather data
     @Json(name = "dt") val dayTime: Long,

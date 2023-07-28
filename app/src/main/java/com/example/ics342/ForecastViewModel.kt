@@ -1,6 +1,5 @@
 package com.example.ics342
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,8 +15,8 @@ class ForecastViewModel @Inject constructor(private val apiService: ApiService) 
         get() = _forecastLiveData
 
     fun fetchWeatherForecast() {
-            viewModelScope.launch {
-                _forecastLiveData.value = apiService.getForecastData()
-            }
+        viewModelScope.launch {
+            _forecastLiveData.value = apiService.getForecastData()
+        }
     }
 }

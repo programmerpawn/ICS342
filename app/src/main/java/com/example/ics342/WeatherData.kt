@@ -24,11 +24,12 @@ data class ForecastTemp(
 )
 
 data class ForecastData(
-    @Json(name = "list") val ForecastList: List<DayForecast>,
+    @Json(name = "list") val forecastList: List<DayForecast>,
 )
 
 data class ForeCastConditions(
     @Json(name = "icon") val icon: String,
+    @Json(name = "description") val description: String,
 )
 
 ////////////////////////////////////////
@@ -52,4 +53,5 @@ data class CurrentWeatherData(
 
 data class WeatherConditions(
     @Json(name = "icon") val icon: String,
+    @Json(name = "description") val description: String,
 )

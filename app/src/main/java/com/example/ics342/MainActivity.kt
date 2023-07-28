@@ -23,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,7 +64,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
 
-    val currentConditions = viewModel.weatherData.observeAsState()
+    val weatherData = viewModel.weatherData.observeAsState()
 
     LaunchedEffect(Unit) {
         viewModel.viewAppeared()
@@ -88,27 +89,27 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
         Row {
             Column(modifier = Modifier.padding(5.dp)) {
                 Text(
-                    text = "${currentConditions.value?.main?.temp}", //Sets the current Temp
+                    text = "${weatherData.value?.main?.temp}", //Sets the current Temp
                     fontSize = 45.sp
                 )
                 Text(
-                    text = "${currentConditions.value?.main?.feelsLike}", //Sets the "feels like" temp
+                    text = "${weatherData.value?.main?.feelsLike}", //Sets the "feels like" temp
                     fontSize = 15.sp
                 )
                 Spacer(modifier = Modifier.height(25.dp))
 
                 //other information about the weather
                 Text(
-                    text = "${currentConditions.value?.main?.tempMin}" //daily low
+                    text = "${weatherData.value?.main?.tempMin}" //daily low
                 )
                 Text(
-                    text = "${currentConditions.value?.main?.tempMax}" //daily high
+                    text = "${weatherData.value?.main?.tempMax}" //daily high
                 )
                 Text(
-                    text = "${currentConditions.value?.main?.humidity}" //humidity
+                    text = "${weatherData.value?.main?.humidity}" //humidity
                 )
                 Text(
-                    text = "${currentConditions.value?.main?.pressure}" //pressure
+                    text = "${weatherData.value?.main?.pressure}" //pressure
                 )
 
             }
@@ -126,6 +127,7 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
         }
     }
 }
+
 
 
 @Composable

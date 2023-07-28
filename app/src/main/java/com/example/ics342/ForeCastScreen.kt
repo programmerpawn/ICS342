@@ -148,7 +148,7 @@ fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {
             .padding(8.dp),
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        items(items = forecastData.value?.ForecastList ?: listOf()) {
+        items(items = forecastData.value?.forecastList ?: listOf()) {
             DataItemView(forecast = it)
         }
     }

@@ -54,7 +54,7 @@ fun DataItemView(forecast: DayForecast) {
     ) {
         val imageMod = Modifier
             .size(45.dp)
-        Image(
+        Image( //fix this so it updates to correct picture
             painter = painterResource(id = R.drawable.sunny),
             contentDescription = "sun",
             contentScale = ContentScale.FillBounds,

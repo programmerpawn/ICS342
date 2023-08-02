@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -71,10 +72,13 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) { //ADD IN THE TITLES FOR EACH OF THE TEMPS HERE THEN IT'S DONE
 
     val weatherData = viewModel.weatherData.observeAsState()
+    val userInput = viewModel.defaultZipcode.observeAsState()
+    val showAlert = viewModel.showInvalidZipWarning.observeAsState(initial = false)
 
     LaunchedEffect(Unit) {
         viewModel.viewAppeared()
@@ -121,10 +125,9 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) { //ADD
                 Text(
                     text = "Pressure ${weatherData.value?.main?.pressure} hPa" //pressure
                 )
-
             }
 
-            Column(modifier = Modifier.padding(5.dp)) { //Sets the picture
+            Column(modifier = Modifier.padding(5.dp)) { //fix this so it updates to correct picture
                 val imageMod = Modifier
                     .size(75.dp)
                 Image(
@@ -136,18 +139,58 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) { //ADD
             }
         }
     }
-    CurrentZipCode(viewModel)
+
+    Column(Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center) {
+        OutlinedTextField(
+            value = userInput.value.toString(),
+            label = {
+                Spacer(modifier = Modifier.height((-500).dp))
+                Text(
+                    text = ("Tap to update zip code "),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = PurpleGrey40,
+                    fontSize = 25.sp
+                )
+            },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            singleLine = true,
+            modifier = Modifier.padding(12.dp),
+            onValueChange = { viewModel.defaultZipcode.value = it }
+        )
+    }
+
+    Column(
+        Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {//Button to update zipcode
+        Spacer(modifier = Modifier.height(150.dp))
+        Button(onClick = {
+            viewModel.showInvalidZipWarning.value = !viewModel.validateZipAndUpdate()
+        }) {
+            Text(text = "Update zip code")
+        }
+        Spacer(modifier = Modifier)
+    }
+
+    if (showAlert.value) {
+        InvalidZipAlert {
+            viewModel.showInvalidZipWarning.value = false
+        }
+    }
 }
 
+/*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CurrentZipCode(viewModel: CurrentConditionsViewModel) {
+fun CurrentZipCode(viewModel: CurrentConditionsViewModel) { //fix the position
     val userInput = viewModel.defaultZipcode.observeAsState()
     val showAlert = viewModel.showInvalidZipWarning.observeAsState(initial = false)
     Column {
         OutlinedTextField(
             value = userInput.value.toString(),
-            leadingIcon = {},
             label = {
                 Text(
                     text = ("Zip code: "),
@@ -158,7 +201,7 @@ fun CurrentZipCode(viewModel: CurrentConditionsViewModel) {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             singleLine = true,
             modifier = Modifier.padding(12.dp),
-            onValueChange = { viewModel.defaultZipcode.value = it}
+            onValueChange = { viewModel.defaultZipcode.value = it }
         )
         Row(modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier)
@@ -166,7 +209,7 @@ fun CurrentZipCode(viewModel: CurrentConditionsViewModel) {
                 viewModel.showInvalidZipWarning.value = !viewModel.validateZipAndUpdate()
 
             }) {
-                Text(text = "Zip code: ")
+                Text(text = "Tap to update zip code")
             }
             Spacer(modifier = Modifier)
         }
@@ -177,8 +220,10 @@ fun CurrentZipCode(viewModel: CurrentConditionsViewModel) {
         }
     }
 }
+*/
+
 @Composable
-fun InvalidZipAlert(
+fun InvalidZipAlert( // Checks if zipcode is USA standard if not sends a error message
     onDismiss: () -> Unit
 ) {
     AlertDialog(onDismissRequest = onDismiss,
@@ -205,12 +250,13 @@ fun HomeScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        Spacer(modifier = Modifier.height((300).dp))
         Button(
             onClick = { navController.navigate(Screens.ForecastScreen.route) },
             colors = ButtonDefaults.buttonColors(Color.Gray.copy(alpha = 1F)),
         ) { Text(text = "Forecast") }
     }
-        WeatherView()
+    WeatherView()
 }
 
 

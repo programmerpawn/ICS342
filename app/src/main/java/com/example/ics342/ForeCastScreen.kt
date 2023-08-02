@@ -125,7 +125,7 @@ fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {
     //val forecastList = forecastData.value?.ForecastList //save this for reference
 
     LaunchedEffect(Unit) {
-        viewModel.fetchWeatherForecast()
+        viewModel.viewAppeared()
     }
 
     Column(

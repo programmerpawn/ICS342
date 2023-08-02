@@ -118,10 +118,8 @@ fun WeatherConditionIconDay( url: String?) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {
-    //TempDetailScreen(forecast: DayForecast)
 
     val forecastData = viewModel.forecastData.observeAsState()
-    //val forecastList = forecastData.value?.ForecastList //save this for reference
 
     LaunchedEffect(Unit) {
         viewModel.viewAppeared()
@@ -141,7 +139,7 @@ fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {
         )
     }
 
-    LazyColumn(
+    LazyColumn(// displays a list of values of forecast
         modifier = Modifier
             .padding(8.dp)
     ) {

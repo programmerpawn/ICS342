@@ -17,18 +17,6 @@ class ForecastViewModel @Inject constructor(private val apiService: ApiService) 
     val forecastData: LiveData<ForecastData>
         get() = _forecastLiveData
 
-    fun validateZip(zip : String?): Boolean {
-        if (
-            (zip.isNullOrEmpty() || zip.length != 5) || (zip.any() { !it.isDigit() })) {
-            return false
-        } else {
-            Log.d("forecastVM.validateZip()", "valid Zip")
-            defaultZipcode.value = zip
-            viewAppeared()
-            return true
-        }
-    }
-
     fun viewAppeared(zip: String? = defaultZipcode.value) = viewModelScope.launch {
         _forecastLiveData.value = apiService.getForecastData(zip.toString())
     }

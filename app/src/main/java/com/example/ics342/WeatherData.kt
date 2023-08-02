@@ -3,8 +3,7 @@ package com.example.ics342
 
 import com.squareup.moshi.Json
 
-data class DayForecast(
-// creates the day weather data
+data class DayForecast(// creates the day weather data
     @Json(name = "dt") val dayTime: Long,
     @Json(name = "sunrise") val sunrise: Long,
     @Json(name = "sunset") val sunset: Long,

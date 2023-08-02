@@ -97,7 +97,7 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
                 .padding(10.dp)
         )
         Text(
-            text = "${weatherData.value?.locationName}",//fix to update to current location
+            text = "${weatherData.value?.locationName}",//gets the current location of zipcode
             fontSize = 15.sp,
             modifier = Modifier.padding(10.dp)
         )
@@ -184,7 +184,7 @@ fun WeatherConditionIcon( url: String?) {
 }
 
 @Composable
-fun InvalidZipAlert( // Checks if zipcode is USA standard if not sends a error message
+fun InvalidZipAlert( // Checks if zipcode is USA standard, if not it sends an error message
     onDismiss: () -> Unit
 ) {
     AlertDialog(onDismissRequest = onDismiss,

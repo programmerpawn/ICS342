@@ -48,6 +48,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.ics342.ui.theme.ICS342Theme
 import com.example.ics342.ui.theme.PurpleGrey40
 import dagger.hilt.android.AndroidEntryPoint
@@ -74,7 +75,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) { //ADD IN THE TITLES FOR EACH OF THE TEMPS HERE THEN IT'S DONE
+fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) {
 
     val weatherData = viewModel.weatherData.observeAsState()
     val userInput = viewModel.defaultZipcode.observeAsState()
@@ -96,7 +97,7 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) { //ADD
                 .padding(10.dp)
         )
         Text(
-            text = stringResource(id = R.string.myLocation),//Sets the location where the temperature is located
+            text = "${weatherData.value?.locationName}",//fix to update to current location
             fontSize = 15.sp,
             modifier = Modifier.padding(10.dp)
         )
@@ -127,15 +128,10 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) { //ADD
                 )
             }
 
-            Column(modifier = Modifier.padding(5.dp)) { //fix this so it updates to correct picture
-                val imageMod = Modifier
-                    .size(75.dp)
-                Image(
-                    painter = painterResource(id = R.drawable.sunny),
-                    contentDescription = "sun",
-                    contentScale = ContentScale.FillBounds,
-                    modifier = imageMod
-                )
+            Column(modifier = Modifier
+                .padding(5.dp)
+                .size(150.dp)) { //updates image to correspond with weather
+                WeatherConditionIcon(url = weatherData.value?.iconUrl)
             }
         }
     }
@@ -182,45 +178,10 @@ fun WeatherView(viewModel: CurrentConditionsViewModel = hiltViewModel()) { //ADD
     }
 }
 
-/*
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CurrentZipCode(viewModel: CurrentConditionsViewModel) { //fix the position
-    val userInput = viewModel.defaultZipcode.observeAsState()
-    val showAlert = viewModel.showInvalidZipWarning.observeAsState(initial = false)
-    Column {
-        OutlinedTextField(
-            value = userInput.value.toString(),
-            label = {
-                Text(
-                    text = ("Zip code: "),
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = PurpleGrey40
-                )
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            singleLine = true,
-            modifier = Modifier.padding(12.dp),
-            onValueChange = { viewModel.defaultZipcode.value = it }
-        )
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Spacer(modifier = Modifier)
-            Button(onClick = {
-                viewModel.showInvalidZipWarning.value = !viewModel.validateZipAndUpdate()
-
-            }) {
-                Text(text = "Tap to update zip code")
-            }
-            Spacer(modifier = Modifier)
-        }
-    }
-    if (showAlert.value) {
-        InvalidZipAlert {
-            viewModel.showInvalidZipWarning.value = false
-        }
-    }
+fun WeatherConditionIcon( url: String?) {
+    AsyncImage(model = url, contentDescription = "", modifier = Modifier.fillMaxWidth())
 }
-*/
 
 @Composable
 fun InvalidZipAlert( // Checks if zipcode is USA standard if not sends a error message

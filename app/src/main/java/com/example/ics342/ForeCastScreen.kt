@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.example.ics342.ui.theme.ICS342Theme
 import java.time.Instant
 import java.time.LocalDateTime
@@ -52,14 +53,7 @@ fun DataItemView(forecast: DayForecast) {
         modifier = Modifier
             .padding(8.dp)
     ) {
-        val imageMod = Modifier
-            .size(45.dp)
-        Image( //fix this so it updates to correct picture
-            painter = painterResource(id = R.drawable.sunny),
-            contentDescription = "sun",
-            contentScale = ContentScale.FillBounds,
-            modifier = imageMod
-        )
+        WeatherConditionIconDay(url = forecast.iconUrlDay)
 
         Text(
             text = LocalDateTime.ofInstant(
@@ -78,12 +72,10 @@ fun DataItemView(forecast: DayForecast) {
             Row {
                 Text(
                     text = "    High: ${forecast.temp.max.roundToInt()}", //gets the high temperature
-                    //style = MaterialTheme.typography.bodySmall,
 
                     )
                 Text(
                     text = "  Low: ${forecast.temp.min.roundToInt()}", //gets the low temperature
-                    //style = MaterialTheme.typography.bodySmall,
 
                     )
             }
@@ -116,6 +108,13 @@ fun DataItemView(forecast: DayForecast) {
     }
 }
 
+@Composable
+fun WeatherConditionIconDay( url: String?) {
+    AsyncImage(model = url, contentDescription = "",
+        modifier =
+        Modifier
+        .size(55.dp))
+}
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TempDetailScreen(viewModel: ForecastViewModel = hiltViewModel()) {

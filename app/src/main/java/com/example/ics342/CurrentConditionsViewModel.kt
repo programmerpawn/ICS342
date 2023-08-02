@@ -19,8 +19,6 @@ class CurrentConditionsViewModel @Inject constructor(private val apiService: Api
     val weatherData: LiveData<CurrentWeatherData>
         get() = _weatherData
 
-    val textFieldText: MutableLiveData<String> = MutableLiveData() //updates the string in text field to be what user inputs for zipcode
-
     fun validateZipAndUpdate(): Boolean { //checks to make sure the zipcode is real
         val currentUserInput = defaultZipcode.value
         if (
